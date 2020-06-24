@@ -12,25 +12,27 @@ const FileSystem = {
   exists: Util.promisify(FS.exists),
 };
 
-async function downloadFile(url: string): Promise<Buffer> {
-  return new Promise((resolve, reject) => {
-    HTTPS.get(url, (response) => {
-      const content = new Stream.Transform();
+const Network = {
+  downloadFile: async (url: string): Promise<Buffer> => {
+    return new Promise((resolve, reject) => {
+      HTTPS.get(url, (response) => {
+        const content = new Stream.Transform();
 
-      response.on("data", (chunk: Buffer) => {
-        content.push(chunk);
-      });
+        response.on("data", (chunk: Buffer) => {
+          content.push(chunk);
+        });
 
-      response.on("end", () => {
-        resolve(content.read());
-      });
+        response.on("end", () => {
+          resolve(content.read());
+        });
 
-      response.on("error", (error) => {
-        reject(error);
+        response.on("error", (error: Error) => {
+          reject(error);
+        });
       });
     });
-  });
-}
+  },
+};
 
 type Attachment = {
   url: string;
@@ -94,7 +96,7 @@ async function main() {
       const file = url.split("/").reverse()[0];
       const path = Path.resolve(attachments, file);
 
-      return downloadFile(url)
+      return Network.downloadFile(url)
         .then((buffer: Buffer) => FileSystem.writeFile(path, buffer))
         .then(() => file);
     })
