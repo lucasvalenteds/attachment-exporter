@@ -67,6 +67,7 @@ async function main() {
 
   const files: Buffer[] = await Promise.all(
     projects
+      .filter((project: string) => project.endsWith(".json"))
       .map((project: string) => Path.resolve(boards, project))
       .map((project: string) => FileSystem.readFile(project))
   );
