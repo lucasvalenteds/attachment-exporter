@@ -11,7 +11,8 @@ Downloaded files are placed in `attachments` directory.
 | Description | Command |
 | :--- | :--- |
 | Install dependencies | `npm install --only=development` |
-| Run script | `npm start` |
+| Compile the script | `npm run build` |
+| Run the script | `npm start` |
 
 > Only Node.js built-in modules are used during runtime.
 

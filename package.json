@@ -1,11 +1,11 @@
 {
   "name": "node-template",
   "version": "0.0.1",
-  "main": "dist/index.js",
+  "main": "index.js",
   "scripts": {
-    "start": "nodemon index.ts",
-    "test": "jest",
-    "build": "tsc"
+    "build": "tsc",
+    "start": "node index.js",
+    "test": "nodemon index.ts"
   },
   "dependencies": {},
   "devDependencies": {
