@@ -25,7 +25,6 @@ The output below can be tested by running `make example`.
 ```
 .
 ├── boards
-│   └── example.json
 ├── index.js
 ├── index.ts
 ├── Makefile
