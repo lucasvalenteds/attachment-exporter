@@ -47,9 +47,9 @@ type Board = {
 async function main() {
   console.log("Starting");
 
-  const output = Path.resolve(__dirname, "attachments");
-  if (!(await FileSystem.exists(output))) {
-    await FileSystem.mkdir(output);
+  const attachments = Path.resolve(__dirname, "attachments");
+  if (!(await FileSystem.exists(attachments))) {
+    await FileSystem.mkdir(attachments);
     console.log("Attachments folder created");
   }
 
@@ -80,21 +80,21 @@ async function main() {
 
   console.log(`${cards.length} cards read`);
 
-  const attachments: string[] = cards.flatMap((card) =>
+  const urls: string[] = cards.flatMap((card) =>
     card.attachments
       .map((attachment: Attachment) => attachment.url)
       .filter((url: string) => url !== undefined)
       .filter((url: string) => extensions.exec(url))
   );
 
-  console.log(`Starting downloads (${attachments.length} files)`);
+  console.log(`Starting downloads (${urls.length} files)`);
 
   const downloads: string[] = await Promise.all(
-    attachments.map((attachment: string) => {
-      const file = attachment.split("/").reverse()[0];
-      const path = Path.resolve(output, file);
+    urls.map((url: string) => {
+      const file = url.split("/").reverse()[0];
+      const path = Path.resolve(attachments, file);
 
-      return downloadFile(attachment)
+      return downloadFile(url)
         .then((buffer: Buffer) => FileSystem.writeFile(path, buffer))
         .then(() => file);
     })
