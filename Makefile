@@ -1,0 +1,5 @@
+BOARD_URL = "https://trello.com/b/U5BRpsu7/mark-bittman-recipes-board"
+
+example:
+	@curl --silent --output boards/example.json $(BOARD_URL).json
+	@npm start
