@@ -47,18 +47,18 @@ type Board = {
 };
 
 async function main() {
-  console.debug("Starting");
+  console.log("Starting");
 
   const output = Path.resolve(__dirname, "attachments");
   if (!(await existsAsync(output))) {
     await mkdirAsync(output);
-    console.debug("Attachments folder created");
+    console.log("Attachments folder created");
   }
 
   const boards = Path.resolve(__dirname, "boards");
   if (!(await existsAsync(boards))) {
     await mkdirAsync(boards);
-    console.debug("Boards folder created");
+    console.log("Boards folder created");
   }
 
   const extensions = new RegExp("(.*?).(jpg|jpeg|png|webp|pdf|zip)$");
@@ -71,7 +71,7 @@ async function main() {
       .map((project: string) => readFileAsync(project))
   );
 
-  console.debug(`${files.length} boards found`);
+  console.log(`${files.length} boards found`);
 
   const cards: Card[] = await Promise.all(
     files
@@ -80,7 +80,7 @@ async function main() {
       .flatMap((board: Board) => board.cards)
   );
 
-  console.debug(`${cards.length} cards read`);
+  console.log(`${cards.length} cards read`);
 
   const attachments: string[] = cards.flatMap((card) =>
     card.attachments
@@ -89,7 +89,7 @@ async function main() {
       .filter((url: string) => extensions.exec(url))
   );
 
-  console.debug(`Starting downloads (${attachments.length} files)`);
+  console.log(`Starting downloads (${attachments.length} files)`);
 
   const downloads: string[] = await Promise.all(
     attachments.map((attachment: string) => {
@@ -102,7 +102,7 @@ async function main() {
     })
   );
 
-  console.debug(`${downloads.length} files downloaded`);
+  console.log(`${downloads.length} files downloaded`);
   downloads.forEach((download: string, index: number) =>
     console.log(`${index + 1}. ${download}`)
   );
