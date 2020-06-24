@@ -4,15 +4,13 @@ import * as Util from "util";
 import * as HTTPS from "https";
 import * as Stream from "stream";
 
-const readFileAsync = Util.promisify(FS.readFile);
-
-const writeFileAsync = Util.promisify(FS.writeFile);
-
-const readDirAsync = Util.promisify(FS.readdir);
-
-const mkdirAsync = Util.promisify(FS.mkdir);
-
-const existsAsync = Util.promisify(FS.exists);
+const FileSystem = {
+  readFile: Util.promisify(FS.readFile),
+  writeFile: Util.promisify(FS.writeFile),
+  readDir: Util.promisify(FS.readdir),
+  mkdir: Util.promisify(FS.mkdir),
+  exists: Util.promisify(FS.exists),
+};
 
 async function downloadFile(url: string): Promise<Buffer> {
   return new Promise((resolve, reject) => {
@@ -50,25 +48,25 @@ async function main() {
   console.log("Starting");
 
   const output = Path.resolve(__dirname, "attachments");
-  if (!(await existsAsync(output))) {
-    await mkdirAsync(output);
+  if (!(await FileSystem.exists(output))) {
+    await FileSystem.mkdir(output);
     console.log("Attachments folder created");
   }
 
   const boards = Path.resolve(__dirname, "boards");
-  if (!(await existsAsync(boards))) {
-    await mkdirAsync(boards);
+  if (!(await FileSystem.exists(boards))) {
+    await FileSystem.mkdir(boards);
     console.log("Boards folder created");
   }
 
   const extensions = new RegExp("(.*?).(jpg|jpeg|png|webp|pdf|zip)$");
 
-  const projects: string[] = await readDirAsync(boards);
+  const projects: string[] = await FileSystem.readDir(boards);
 
   const files: Buffer[] = await Promise.all(
     projects
       .map((project: string) => Path.resolve(boards, project))
-      .map((project: string) => readFileAsync(project))
+      .map((project: string) => FileSystem.readFile(project))
   );
 
   console.log(`${files.length} boards found`);
@@ -97,7 +95,7 @@ async function main() {
       const path = Path.resolve(output, file);
 
       return downloadFile(attachment)
-        .then((buffer: Buffer) => writeFileAsync(path, buffer))
+        .then((buffer: Buffer) => FileSystem.writeFile(path, buffer))
         .then(() => file);
     })
   );
