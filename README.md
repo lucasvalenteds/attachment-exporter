@@ -10,12 +10,12 @@ Downloaded files are placed in `attachments` directory.
 
 | Description | Command |
 | :--- | :--- |
-| Install dependencies | `npm install --only=dev` |
+| Install dependencies | `npm install --only=development` |
 | Run script | `npm start` |
 
 ## Preview
 
-**directory structure before**
+**Directory structure before**
 
 ```
 .
