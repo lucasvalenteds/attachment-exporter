@@ -4,5 +4,6 @@ dist/
 *.swp
 
 attachments/
-boards/
+boards/*
+!boards/.gitkeep
 *.js
